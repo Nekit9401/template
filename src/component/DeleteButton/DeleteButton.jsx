@@ -1,6 +1,6 @@
-export const DeleteButton = ({ id, dataUSers, setDataUsers }) => {
+export const DeleteButton = ({ id, dataUsers, setDataUsers }) => {
 	const handleDeleteUser = (id) => {
-		const updateDataUsers = dataUSers.filter((user) => {
+		const updateDataUsers = dataUsers.filter((user) => {
 			return user._id !== id;
 		});
 		setDataUsers(updateDataUsers);
