@@ -1,41 +1,55 @@
 import { useEffect, useState } from 'react';
 import styles from './App.module.css';
 import { TodoItem } from './components/TodoItem';
+import { ref, onValue, push, remove, update } from 'firebase/database';
+import { db } from './firebase';
+import { useDebounce } from './hooks';
 
 export const App = () => {
-	const [todoData, setTodoData] = useState([]);
+	const [todoData, setTodoData] = useState({});
 	const [inputValue, setInputValue] = useState('');
 	const [searchValue, setSearchValue] = useState('');
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSorted, setIsSorted] = useState(false);
 
-	const fetchData = async () => {
+	const debouncedSearchValue = useDebounce(searchValue, 300);
+
+	const todosDbRef = ref(db, 'todos');
+
+	const filterTodos = (todos, searchPhrase) => {
+		if (!searchPhrase) return todos;
+
+		return Object.fromEntries(
+			Object.entries(todos).filter((todo) => todo[1].title.toLowerCase().includes(searchPhrase.toLowerCase())),
+		);
+	};
+
+	const filteredTodos = filterTodos(todoData, debouncedSearchValue);
+
+	const sortedTodos = Object.entries(filteredTodos).sort((a, b) => {
+		const valueA = a[1].title;
+		const valueB = b[1].title;
+
+		return valueA.localeCompare(valueB);
+	});
+
+	const fetchData = () => {
 		setIsLoading(true);
-		try {
-			const response = await fetch('http://localhost:3000/todos');
-			const loadedTodoData = await response.json();
-			setTodoData(loadedTodoData);
-			setIsSorted(false);
-		} catch (error) {
-			setError(error.message);
-		} finally {
+
+		return onValue(todosDbRef, (shapshot) => {
+			const loadedTodos = shapshot.val() || {};
+			setTodoData(loadedTodos);
 			setIsLoading(false);
-		}
+			setIsSorted(false);
+		});
 	};
 
 	const addTodo = async (payLoad) => {
 		setIsLoading(true);
+
 		try {
-			const response = await fetch('http://localhost:3000/todos', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(payLoad),
-			});
-			const addsTodo = await response.json();
-			setTodoData([...todoData, addsTodo]);
+			await push(todosDbRef, payLoad);
 			setInputValue('');
 		} catch (error) {
 			setError(error.message);
@@ -46,11 +60,10 @@ export const App = () => {
 
 	const deleteTodo = async (id) => {
 		setIsLoading(true);
+
 		try {
-			fetch(`http://localhost:3000/todos/${id}`, {
-				method: 'DELETE',
-			});
-			setTodoData(todoData.filter((todo) => todo.id !== id));
+			const removedTodoDbRef = ref(db, `todos/${id}`);
+			await remove(removedTodoDbRef);
 		} catch (error) {
 			setError(error.message);
 		} finally {
@@ -60,16 +73,10 @@ export const App = () => {
 
 	const updateTodo = async (id, payLoad) => {
 		setIsLoading(true);
+
 		try {
-			const response = await fetch(`http://localhost:3000/todos/${id}`, {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(payLoad),
-			});
-			const updatedTodo = await response.json();
-			setTodoData((prevData) => prevData.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo)));
+			const updatedTodoDbRef = ref(db, `todos/${id}`);
+			await update(updatedTodoDbRef, payLoad);
 		} catch (error) {
 			setError(error.message);
 		} finally {
@@ -77,32 +84,10 @@ export const App = () => {
 		}
 	};
 
-	const sortTodo = async () => {
-		setIsLoading(true);
-		try {
-			const response = await fetch('http://localhost:3000/todos?_sort=title');
-			const sortedTodoData = await response.json();
-			setTodoData(sortedTodoData);
-			setIsSorted(true);
-		} catch (error) {
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	const searchTodo = async (phrase) => {
-		setIsLoading(true);
-		try {
-			const response = await fetch(`http://localhost:3000/todos?title_like=${phrase}`);
-			const filteredTodoData = await response.json();
-			setTodoData(filteredTodoData);
-			setSearchValue('');
-		} catch (error) {
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
-		}
+	const sortTodo = () => {
+		setIsSorted(true);
+		console.log(sortedTodos);
+		console.log(Object.fromEntries(sortedTodos));
 	};
 
 	const handleCreateSubmit = (event) => {
@@ -110,14 +95,7 @@ export const App = () => {
 		addTodo({ title: inputValue, complete: false });
 	};
 
-	const handleSearchSubmit = (event) => {
-		event.preventDefault();
-		searchTodo(searchValue);
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
+	useEffect(() => fetchData(), []);
 
 	if (isLoading) {
 		return <h1>Загрузка...</h1>;
@@ -135,30 +113,34 @@ export const App = () => {
 						type='text'
 						value={inputValue}
 						onChange={(e) => setInputValue(e.target.value)}
+						placeholder='Новая задача'
 					/>
 					<button className={styles.createTodoButton} type='submit'>
 						Создать задачу
 					</button>
 				</form>
-				<form onSubmit={handleSearchSubmit}>
+				<form>
 					<input
+						className={styles.searchInput}
 						name='search'
 						type='text'
 						value={searchValue}
 						onChange={(e) => setSearchValue(e.target.value)}
+						placeholder='Поиск задач...'
 					/>
-					<button className={styles.searchTodoButton} type='submit'>
-						Найти
-					</button>
 				</form>
 				<button className={styles.sortTodoButton} onClick={isSorted ? fetchData : sortTodo}>
 					{isSorted ? 'Сортировать по умочанию' : 'Сортировать по алфавиту'}
 				</button>
 			</div>
 			<ul className={styles.todoList}>
-				{todoData.map((todo) => (
-					<TodoItem key={todo.id} {...todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-				))}
+				{isSorted
+					? sortedTodos.map(([id, { ...props }]) => (
+							<TodoItem key={id} {...props} id={id} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+						))
+					: Object.entries(filteredTodos).map(([id, { ...props }]) => (
+							<TodoItem key={id} {...props} id={id} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+						))}
 			</ul>
 		</div>
 	);

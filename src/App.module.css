@@ -37,6 +37,15 @@ button {
 	transition: all 0.3s ease;
 }
 
+.searchInput {
+	padding: 10px 15px;
+	margin: 10px 0;
+	width: 100%;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	font-size: 16px;
+}
+
 .createTodoButton {
 	background-color: #4a6cf7;
 	color: white;

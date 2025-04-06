@@ -12,6 +12,7 @@ export const TodoItem = ({ id, title, deleteTodo, updateTodo }) => {
 	const handleSave = (event) => {
 		event.preventDefault();
 		updateTodo(id, { title: text });
+		setIsEditing(!isEditing);
 	};
 
 	return (
