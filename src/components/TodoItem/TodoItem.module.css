@@ -1,0 +1,108 @@
+.todoItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px 20px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	transition: all 0.3s ease;
+	margin-bottom: 10px;
+}
+
+.todoItem:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.todoItem h1 {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 500;
+	color: #333;
+	flex-grow: 1;
+}
+
+.todoItem form {
+	display: flex;
+	gap: 10px;
+	width: 100%;
+}
+
+.todoItem input {
+	flex-grow: 1;
+	padding: 8px 12px;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	font-size: 16px;
+}
+
+.todoItem button {
+	padding: 8px 16px;
+	border: none;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.actionButtons {
+	display: flex;
+	gap: 8px;
+	margin-left: 16px;
+}
+
+.deleteButton {
+	background-color: #ff5252;
+	color: white;
+	margin-left: 10px;
+}
+
+.deleteButton:hover {
+	background-color: #ff3d3d;
+}
+
+.editButton {
+	background-color: #4a6cf7;
+	color: white;
+	margin-left: 10px;
+}
+
+.editButton:hover {
+	background-color: #3a5bd9;
+}
+
+.saveButton {
+	background-color: #4caf50;
+	color: white;
+}
+
+.saveButton:hover {
+	background-color: #3e8e41;
+}
+
+.cancelButton {
+	background-color: #f5f5f5;
+	color: #333;
+}
+
+.cancelButton:hover {
+	background-color: #e0e0e0;
+}
+
+/* Анимация при редактировании */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.todoItem form {
+	animation: fadeIn 0.2s ease-out;
+}
