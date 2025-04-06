@@ -1,98 +1,16 @@
 .container {
-	max-width: 800px;
+	max-width: 600px;
 	margin: 0 auto;
-	padding: 2rem;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-form {
-	display: flex;
-	gap: 10px;
-	margin-bottom: 20px;
-}
-
-input {
-	padding: 12px 15px;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	font-size: 16px;
-	flex-grow: 1;
-	transition: all 0.3s ease;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-input:focus {
-	outline: none;
-	border-color: #4a6cf7;
-	box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
-}
-
-button {
-	padding: 12px 20px;
-	border: none;
-	border-radius: 8px;
-	font-size: 16px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.3s ease;
-}
-
-.searchInput {
-	padding: 10px 15px;
-	margin: 10px 0;
-	width: 100%;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	font-size: 16px;
-}
-
-.createTodoButton {
-	background-color: #4a6cf7;
-	color: white;
-}
-
-.createTodoButton:hover {
-	background-color: #3a5bd9;
-	transform: translateY(-1px);
-}
-
-.searchTodoButton {
-	background-color: #f5f5f5;
-	color: #333;
-}
-
-.searchTodoButton:hover {
-	background-color: #e0e0e0;
-}
-
-.sortTodoButton {
-	background-color: #f5f5f5;
-	color: #333;
-	margin-bottom: 20px;
+	padding: 20px;
+	box-sizing: border-box;
 	width: 100%;
 }
 
-.sortTodoButton:hover {
-	background-color: #e0e0e0;
-}
-
-.todoList {
-	list-style: none;
-	padding: 0;
-	margin: 0;
+.controls {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
-}
-
-.loading {
-	text-align: center;
-	padding: 2rem;
-	color: #666;
-}
-
-.error {
-	color: #ff5252;
-	text-align: center;
-	padding: 2rem;
+	gap: 15px;
+	width: 100%;
+	box-sizing: border-box;
+	margin-bottom: 15px;
 }

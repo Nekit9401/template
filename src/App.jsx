@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import styles from './App.module.css';
-import { TodoItem } from './components/TodoItem';
 import { ref, onValue, push, remove, update } from 'firebase/database';
 import { db } from './firebase';
 import { useDebounce } from './hooks';
+import { TodoForm } from './components/TodoForm';
+import { SearchBar } from './components/SearchBar';
+import { SortButton } from './components/SortButton/SortButton';
+import { TodoList } from './components/TodoList';
 
 export const App = () => {
 	const [todoData, setTodoData] = useState({});
@@ -84,16 +87,18 @@ export const App = () => {
 		}
 	};
 
-	const sortTodo = () => {
-		setIsSorted(true);
-		console.log(sortedTodos);
+	const handleSortClick = () => {
 		console.log(Object.fromEntries(sortedTodos));
+		console.log(sortedTodos);
+		return isSorted ? fetchData() : setIsSorted(true);
 	};
 
 	const handleCreateSubmit = (event) => {
 		event.preventDefault();
 		addTodo({ title: inputValue, complete: false });
 	};
+
+	const handleSearchChange = (e) => setSearchValue(e.target.value);
 
 	useEffect(() => fetchData(), []);
 
@@ -106,42 +111,18 @@ export const App = () => {
 
 	return (
 		<div className={styles.container}>
-			<div>
-				<form onSubmit={handleCreateSubmit}>
-					<input
-						name='create'
-						type='text'
-						value={inputValue}
-						onChange={(e) => setInputValue(e.target.value)}
-						placeholder='Новая задача'
-					/>
-					<button className={styles.createTodoButton} type='submit'>
-						Создать задачу
-					</button>
-				</form>
-				<form>
-					<input
-						className={styles.searchInput}
-						name='search'
-						type='text'
-						value={searchValue}
-						onChange={(e) => setSearchValue(e.target.value)}
-						placeholder='Поиск задач...'
-					/>
-				</form>
-				<button className={styles.sortTodoButton} onClick={isSorted ? fetchData : sortTodo}>
-					{isSorted ? 'Сортировать по умочанию' : 'Сортировать по алфавиту'}
-				</button>
+			<div className={styles.controls}>
+				<TodoForm onSubmit={handleCreateSubmit} inputValue={inputValue} setInputValue={setInputValue} />
+				<SearchBar value={searchValue} onChange={handleSearchChange} />
+				<SortButton isSorted={isSorted} onClick={handleSortClick} />
 			</div>
-			<ul className={styles.todoList}>
-				{isSorted
-					? sortedTodos.map(([id, { ...props }]) => (
-							<TodoItem key={id} {...props} id={id} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-						))
-					: Object.entries(filteredTodos).map(([id, { ...props }]) => (
-							<TodoItem key={id} {...props} id={id} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-						))}
-			</ul>
+			<TodoList
+				isSorted={isSorted}
+				sortedTodos={sortedTodos}
+				filteredTodos={filteredTodos}
+				deleteTodo={deleteTodo}
+				updateTodo={updateTodo}
+			/>
 		</div>
 	);
 };

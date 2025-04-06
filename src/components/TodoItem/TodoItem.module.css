@@ -23,21 +23,29 @@
 	flex-grow: 1;
 }
 
-.todoItem form {
+form {
 	display: flex;
 	gap: 10px;
-	width: 100%;
+	margin-bottom: 10px;
 }
 
-.todoItem input {
-	flex-grow: 1;
-	padding: 8px 12px;
+input {
+	padding: 12px 15px;
 	border: 1px solid #e0e0e0;
-	border-radius: 6px;
+	border-radius: 8px;
 	font-size: 16px;
+	flex-grow: 1;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.todoItem button {
+input:focus {
+	outline: none;
+	border-color: #4a6cf7;
+	box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+button {
 	padding: 8px 16px;
 	border: none;
 	border-radius: 6px;
@@ -91,7 +99,6 @@
 	background-color: #e0e0e0;
 }
 
-/* Анимация при редактировании */
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -103,6 +110,6 @@
 	}
 }
 
-.todoItem form {
+form {
 	animation: fadeIn 0.2s ease-out;
 }
