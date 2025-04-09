@@ -23,18 +23,24 @@
 	flex-grow: 1;
 }
 
-.todoItem form {
+.editForm {
 	display: flex;
 	gap: 10px;
 	width: 100%;
 }
 
-.todoItem input {
+.editInput {
 	flex-grow: 1;
 	padding: 8px 12px;
 	border: 1px solid #e0e0e0;
 	border-radius: 6px;
 	font-size: 16px;
+}
+
+.editInput:focus {
+	outline: none;
+	border-color: #4a6cf7;
+	box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.1);
 }
 
 .todoItem button {
