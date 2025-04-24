@@ -1,3 +1,9 @@
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
 .todoItem {
 	display: flex;
 	align-items: center;
@@ -77,6 +83,12 @@
 
 .editButton:hover {
 	background-color: #3a5bd9;
+}
+
+.backButton {
+	background-color: #67cf99;
+	color: white;
+	margin-right: 10px;
 }
 
 .saveButton {

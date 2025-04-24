@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import styles from './App.module.css';
 import { CreateTodo } from './components/CreateTodo';
-import { SearchTodo } from './components/SearchTodo/SearchTodo';
-import { SortButton } from './components/SortButton/SortButton';
-import { TodoList } from './components/TodoList/TodoList';
+import { SearchTodo } from './components/SearchTodo';
+import { SortButton } from './components/SortButton';
+import { TodoList } from './components/TodoList';
 
 export const App = () => {
 	const [todoData, setTodoData] = useState([]);
@@ -41,39 +41,6 @@ export const App = () => {
 			setTodoData([...todoData, addsTodo]);
 			console.log(addsTodo);
 			setCreateValue('');
-		} catch (error) {
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	const deleteTodo = async (id) => {
-		setIsLoading(true);
-		try {
-			fetch(`http://localhost:3000/todos/${id}`, {
-				method: 'DELETE',
-			});
-			setTodoData(todoData.filter((todo) => todo.id !== id));
-		} catch (error) {
-			setError(error.message);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	const updateTodo = async (id, payLoad) => {
-		setIsLoading(true);
-		try {
-			const response = await fetch(`http://localhost:3000/todos/${id}`, {
-				method: 'PATCH',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(payLoad),
-			});
-			const updatedTodo = await response.json();
-			setTodoData((prevData) => prevData.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo)));
 		} catch (error) {
 			setError(error.message);
 		} finally {

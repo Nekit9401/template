@@ -1,29 +1,19 @@
 {
   "todos": [
     {
-      "title": "222222",
+      "title": "Тестовая задача",
       "complete": false,
-      "id": 4
+      "id": 1
     },
     {
-      "title": "яяяяя",
+      "title": "Задача",
       "complete": false,
-      "id": 5
+      "id": 2
     },
     {
-      "title": "ррррррр",
+      "title": "Проверка",
       "complete": false,
-      "id": 6
-    },
-    {
-      "title": "абв",
-      "complete": false,
-      "id": 7
-    },
-    {
-      "title": "ggbg",
-      "complete": false,
-      "id": 8
+      "id": 3
     }
   ]
 }
