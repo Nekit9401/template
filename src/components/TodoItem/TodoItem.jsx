@@ -83,9 +83,6 @@ export const TodoItem = () => {
 	if (error) {
 		return <h2>{error}</h2>;
 	}
-	if (!todo) {
-		return navigate('/404');
-	}
 
 	return (
 		<div className={styles.container}>
