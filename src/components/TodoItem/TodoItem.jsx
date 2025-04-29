@@ -15,10 +15,16 @@ export const TodoItem = ({ id, title, deleteTodo, updateTodo }) => {
 	};
 
 	return (
-		<div>
+		<div className={styles.container}>
 			{isEditing ? (
-				<form onSubmit={handleSave}>
-					<input name='edit' type='text' value={text} onChange={(e) => setText(e.target.value)} />
+				<form onSubmit={handleSave} className={styles.editForm}>
+					<input
+						className={styles.editInput}
+						name='edit'
+						type='text'
+						value={text}
+						onChange={(e) => setText(e.target.value)}
+					/>
 					<button className={styles.saveButton} type='submit'>
 						Сохранить
 					</button>

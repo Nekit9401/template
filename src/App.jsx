@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import styles from './App.module.css';
-import { TodoItem } from './components/TodoItem';
+import { TodoList } from './components/TodoList';
+import { CreateTodo } from './components/CreateTodo/';
+import { SearchTodo } from './components/SearchTodo/';
+import { SortButton } from './components/SortButton/';
 
 export const App = () => {
 	const [todoData, setTodoData] = useState([]);
-	const [inputValue, setInputValue] = useState('');
+	const [createValue, setCreateValue] = useState('');
 	const [searchValue, setSearchValue] = useState('');
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +39,7 @@ export const App = () => {
 			});
 			const addsTodo = await response.json();
 			setTodoData([...todoData, addsTodo]);
-			setInputValue('');
+			setCreateValue('');
 		} catch (error) {
 			setError(error.message);
 		} finally {
@@ -107,13 +110,15 @@ export const App = () => {
 
 	const handleCreateSubmit = (event) => {
 		event.preventDefault();
-		addTodo({ title: inputValue, complete: false });
+		addTodo({ title: createValue, complete: false });
 	};
 
 	const handleSearchSubmit = (event) => {
 		event.preventDefault();
 		searchTodo(searchValue);
 	};
+
+	const handleOnClickSort = () => (isSorted ? fetchData() : sortTodo());
 
 	useEffect(() => {
 		fetchData();
@@ -129,37 +134,11 @@ export const App = () => {
 	return (
 		<div className={styles.container}>
 			<div>
-				<form onSubmit={handleCreateSubmit}>
-					<input
-						name='create'
-						type='text'
-						value={inputValue}
-						onChange={(e) => setInputValue(e.target.value)}
-					/>
-					<button className={styles.createTodoButton} type='submit'>
-						Создать задачу
-					</button>
-				</form>
-				<form onSubmit={handleSearchSubmit}>
-					<input
-						name='search'
-						type='text'
-						value={searchValue}
-						onChange={(e) => setSearchValue(e.target.value)}
-					/>
-					<button className={styles.searchTodoButton} type='submit'>
-						Найти
-					</button>
-				</form>
-				<button className={styles.sortTodoButton} onClick={isSorted ? fetchData : sortTodo}>
-					{isSorted ? 'Сортировать по умочанию' : 'Сортировать по алфавиту'}
-				</button>
+				<CreateTodo onSubmit={handleCreateSubmit} value={createValue} setValue={setCreateValue} />
+				<SearchTodo onSubmit={handleSearchSubmit} value={searchValue} setValue={setSearchValue} />
+				<SortButton onClick={handleOnClickSort} isSorted={isSorted} />
 			</div>
-			<ul className={styles.todoList}>
-				{todoData.map((todo) => (
-					<TodoItem key={todo.id} {...todo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-				))}
-			</ul>
+			<TodoList todoData={todoData} deleteTodo={deleteTodo} updateTodo={updateTodo} />
 		</div>
 	);
 };
