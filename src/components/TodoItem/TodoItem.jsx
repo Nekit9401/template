@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import styles from './TodoItem.module.css';
+import { TodoContext } from '../../context';
 
-export const TodoItem = ({ id, title, deleteTodo, updateTodo }) => {
+export const TodoItem = ({ id, title }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [text, setText] = useState(title);
+
+	const { deleteTodo, updateTodo } = use(TodoContext);
 
 	const handleEdit = () => {
 		setIsEditing(!isEditing);

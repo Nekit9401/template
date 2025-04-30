@@ -6,8 +6,10 @@ export const CreateTodo = ({ addTodo }) => {
 
 	const handleCreateSubmit = (event) => {
 		event.preventDefault();
-		addTodo({ title: createValue, complete: false });
-		setCreateValue('');
+		if (createValue) {
+			addTodo({ title: createValue, complete: false });
+			setCreateValue('');
+		}
 	};
 
 	return (

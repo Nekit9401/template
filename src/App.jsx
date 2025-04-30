@@ -4,6 +4,7 @@ import { TodoList } from './components/TodoList';
 import { CreateTodo } from './components/CreateTodo/';
 import { SearchTodo } from './components/SearchTodo/';
 import { SortButton } from './components/SortButton/';
+import { TodoContext } from './context';
 
 export const App = () => {
 	const [todoData, setTodoData] = useState([]);
@@ -119,12 +120,14 @@ export const App = () => {
 
 	return (
 		<div className={styles.container}>
-			<div>
+			<div className={styles.controls}>
 				<CreateTodo addTodo={addTodo} />
 				<SearchTodo searchTodo={searchTodo} />
 				<SortButton onClick={handleOnClickSort} isSorted={isSorted} />
 			</div>
-			<TodoList todoData={todoData} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+			<TodoContext value={{ deleteTodo, updateTodo }}>
+				<TodoList todoData={todoData} />
+			</TodoContext>
 		</div>
 	);
 };
