@@ -7,8 +7,6 @@ import { SortButton } from './components/SortButton/';
 
 export const App = () => {
 	const [todoData, setTodoData] = useState([]);
-	const [createValue, setCreateValue] = useState('');
-	const [searchValue, setSearchValue] = useState('');
 	const [error, setError] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSorted, setIsSorted] = useState(false);
@@ -39,7 +37,6 @@ export const App = () => {
 			});
 			const addsTodo = await response.json();
 			setTodoData([...todoData, addsTodo]);
-			setCreateValue('');
 		} catch (error) {
 			setError(error.message);
 		} finally {
@@ -100,22 +97,11 @@ export const App = () => {
 			const response = await fetch(`http://localhost:3000/todos?title_like=${phrase}`);
 			const filteredTodoData = await response.json();
 			setTodoData(filteredTodoData);
-			setSearchValue('');
 		} catch (error) {
 			setError(error.message);
 		} finally {
 			setIsLoading(false);
 		}
-	};
-
-	const handleCreateSubmit = (event) => {
-		event.preventDefault();
-		addTodo({ title: createValue, complete: false });
-	};
-
-	const handleSearchSubmit = (event) => {
-		event.preventDefault();
-		searchTodo(searchValue);
 	};
 
 	const handleOnClickSort = () => (isSorted ? fetchData() : sortTodo());
@@ -134,8 +120,8 @@ export const App = () => {
 	return (
 		<div className={styles.container}>
 			<div>
-				<CreateTodo onSubmit={handleCreateSubmit} value={createValue} setValue={setCreateValue} />
-				<SearchTodo onSubmit={handleSearchSubmit} value={searchValue} setValue={setSearchValue} />
+				<CreateTodo addTodo={addTodo} />
+				<SearchTodo searchTodo={searchTodo} />
 				<SortButton onClick={handleOnClickSort} isSorted={isSorted} />
 			</div>
 			<TodoList todoData={todoData} deleteTodo={deleteTodo} updateTodo={updateTodo} />

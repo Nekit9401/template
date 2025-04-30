@@ -1,14 +1,24 @@
+import { useState } from 'react';
 import styles from './SearchTodo.module.css';
 
-export const SearchTodo = ({ onSubmit, value, setValue }) => {
+export const SearchTodo = ({ searchTodo }) => {
+	const [searchValue, setSearchValue] = useState('');
+
+	const handleSearchSubmit = (event) => {
+		event.preventDefault();
+		searchTodo(searchValue);
+		setSearchValue('');
+	};
+
 	return (
-		<form className={styles.searchForm} onSubmit={onSubmit}>
+		<form className={styles.searchForm} onSubmit={handleSearchSubmit}>
 			<input
 				className={styles.searchInput}
 				name='search'
 				type='text'
-				value={value}
-				onChange={(e) => setValue(e.target.value)}
+				value={searchValue}
+				onChange={(e) => setSearchValue(e.target.value)}
+				placeholder='Найти задачу'
 			/>
 			<button className={styles.searchTodoButton} type='submit'>
 				Найти
