@@ -1,12 +1,7 @@
 {
   "todos": [
     {
-      "title": "Новая задача",
-      "complete": false,
-      "id": 1
-    },
-    {
-      "title": "Вторая задача",
+      "title": "Вторая задачка",
       "complete": false,
       "id": 2
     },
@@ -24,6 +19,11 @@
       "title": "Седьмая задача",
       "complete": false,
       "id": 6
+    },
+    {
+      "title": "Создан",
+      "complete": false,
+      "id": 7
     }
   ]
 }

@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import styles from './SearchTodo.module.css';
+import { useDispatch } from 'react-redux';
+import { setSearchQuery } from '../../redux/actions/filterAction';
 
-export const SearchTodo = ({ searchTodo }) => {
+export const SearchTodo = () => {
 	const [searchValue, setSearchValue] = useState('');
+	const dispatch = useDispatch();
 
 	const handleSearchSubmit = (event) => {
 		event.preventDefault();
-		searchTodo(searchValue);
+		dispatch(setSearchQuery(searchValue));
 		setSearchValue('');
 	};
 

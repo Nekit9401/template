@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import styles from './CreateTodo.module.css';
+import { useDispatch } from 'react-redux';
+import { createTodo } from '../../redux/thunks';
 
-export const CreateTodo = ({ addTodo }) => {
+export const CreateTodo = () => {
 	const [createValue, setCreateValue] = useState('');
+
+	const dispatch = useDispatch();
 
 	const handleCreateSubmit = (event) => {
 		event.preventDefault();
-		if (createValue) {
-			addTodo({ title: createValue, complete: false });
+		if (createValue.trim()) {
+			dispatch(createTodo({ title: createValue, complete: false }));
 			setCreateValue('');
 		}
 	};

@@ -1,12 +1,13 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import styles from './TodoItem.module.css';
-import { TodoContext } from '../../context';
+import { useDispatch } from 'react-redux';
+import { deleteTodo, updateTodo } from '../../redux/thunks';
 
 export const TodoItem = ({ id, title }) => {
 	const [isEditing, setIsEditing] = useState(false);
-	const [text, setText] = useState(title);
+	const [editingText, setEditingText] = useState(title);
 
-	const { deleteTodo, updateTodo } = use(TodoContext);
+	const dispatch = useDispatch();
 
 	const handleEdit = () => {
 		setIsEditing(!isEditing);
@@ -14,7 +15,11 @@ export const TodoItem = ({ id, title }) => {
 
 	const handleSave = (event) => {
 		event.preventDefault();
-		updateTodo(id, { title: text });
+		dispatch(updateTodo(id, { title: editingText }));
+	};
+
+	const handleDelete = (id) => {
+		dispatch(deleteTodo(id));
 	};
 
 	return (
@@ -25,8 +30,8 @@ export const TodoItem = ({ id, title }) => {
 						className={styles.editInput}
 						name='edit'
 						type='text'
-						value={text}
-						onChange={(e) => setText(e.target.value)}
+						value={editingText}
+						onChange={(e) => setEditingText(e.target.value)}
 					/>
 					<button className={styles.saveButton} type='submit'>
 						Сохранить
@@ -39,7 +44,7 @@ export const TodoItem = ({ id, title }) => {
 				<div className={styles.todoItem}>
 					<h1>{title}</h1>
 					<div className={styles.actionButton}>
-						<button className={styles.deleteButton} onClick={() => deleteTodo(id)}>
+						<button className={styles.deleteButton} onClick={() => handleDelete(id)}>
 							Удалить
 						</button>
 						<button className={styles.editButton} onClick={handleEdit}>
